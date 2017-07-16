@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+require 'bootstrap.php';
+
+use Symfony\Component\Console\Application;
+
+$console = new Application(
+        'Currency Watcher',
+        '1.0'
+);
+
+$console->run();

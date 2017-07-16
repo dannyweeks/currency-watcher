@@ -1,0 +1,17 @@
+Weeks\CurrencyWatcher\Domain\Entity\Currency:
+    type: entity
+    repositoryClass: Weeks\CurrencyWatcher\Application\Repository\CurrencyRepository
+    table: currencies
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        code:
+            type: string
+            unique: true
+        symbol:
+            type: string
+        countryName:
+            type: string

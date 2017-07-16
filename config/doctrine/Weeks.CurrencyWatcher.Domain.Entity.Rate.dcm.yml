@@ -1,0 +1,26 @@
+Weeks\CurrencyWatcher\Domain\Entity\Rate:
+    type: entity
+    repositoryClass: Weeks\CurrencyWatcher\Application\Repository\RateRepository
+    table: rates
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        quotedAt:
+            type: datetime
+            column: quoted_at
+        value:
+            type: decimal
+    manyToOne:
+        baseCurrency:
+            targetEntity: Weeks\CurrencyWatcher\Domain\Entity\Currency
+            joinColumn:
+                name: base_currency_id
+                referencedColumnName: id
+        targetCurrency:
+            targetEntity: Weeks\CurrencyWatcher\Domain\Entity\Currency
+            joinColumn:
+                name: target_currency_id
+                referencedColumnName: id

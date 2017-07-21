@@ -8,6 +8,9 @@ class Currency
 {
     use IdentifiableTrait;
 
+    const CODE_GBP = 'GBP';
+    const CODE_ISK = 'ISK';
+
     /**
      * The three letter international currency code.
      *

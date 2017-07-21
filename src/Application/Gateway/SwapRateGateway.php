@@ -43,7 +43,7 @@ class SwapRateGateway implements RateGatewayInterface
         Currency $targetCurrency
     ) {
         $exchangeRate = $this->swap->latest(
-            'USD'
+            $baseCurrency->getCode()
             . '/'
             . $targetCurrency->getCode()
         );

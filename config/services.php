@@ -5,14 +5,16 @@ use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use Swap\Swap;
 use Weeks\CurrencyWatcher\Application\Gateway\SwapRateGateway;
+use Weeks\CurrencyWatcher\Application\Mailer\SwiftMailer;
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 use Weeks\CurrencyWatcher\Domain\Entity\Rate;
 use Weeks\CurrencyWatcher\Domain\Gateway\RateGatewayInterface;
+use Weeks\CurrencyWatcher\Domain\Mailer\MailerInterface;
 use Weeks\CurrencyWatcher\Domain\Repository\CurrencyRepositoryInterface;
 use Weeks\CurrencyWatcher\Domain\Repository\RateRepositoryInterface;
 
 return [
-    EntityManager::class => \DI\factory(function ($db) {
+    EntityManager::class => function (ContainerInterface $c) {
         $doctrineConfig = Setup::createYAMLMetadataConfiguration(
             [
                 __DIR__ . "/doctrine"
@@ -21,27 +23,50 @@ return [
         );
 
         return EntityManager::create(
-            $db,
+            $c->get('db'),
             $doctrineConfig
         );
-    })->parameter('db', DI\get('db')),
+    },
 
-    CurrencyRepositoryInterface::class => \DI\factory(function (EntityManager $em) {
-        return $em->getRepository(Currency::class);
-    }),
+    CurrencyRepositoryInterface::class => function (ContainerInterface $c) {
+        return $c->get(EntityManager::class)
+            ->getRepository(Currency::class);
+    },
 
-    RateRepositoryInterface::class => \DI\factory(function (EntityManager $em) {
-        return $em->getRepository(Rate::class);
-    }),
+    RateRepositoryInterface::class => function (ContainerInterface $c) {
+        return $c->get(EntityManager::class)
+            ->getRepository(Rate::class);
+    },
 
-    Swap::class => \DI\factory(function (ContainerInterface $c) {
+    Swap::class => function (ContainerInterface $c) {
 
         return (new \Swap\Builder())
-            ->add('currency_layer', [
-                'access_key' => $c->get('currencyLayer')['accessKey'],
-                'enterprise' => false
-            ])->build();
-    }),
+            ->add('google')
+            ->build();
+    },
 
-    RateGatewayInterface::class => \DI\get(SwapRateGateway::class)
+    RateGatewayInterface::class => function (ContainerInterface $c) {
+        return $c->get(SwapRateGateway::class);
+    },
+
+
+    \Swift_Mailer::class => function (ContainerInterface $c) {
+        $mailConfig = $c->get('mail');
+        $transport = new Swift_SmtpTransport(
+            $mailConfig['host'],
+            $mailConfig['port']
+        );
+
+        $transport->setUsername($mailConfig['username'])
+            ->setPassword($mailConfig['password']);
+
+        return \Swift_Mailer::newInstance($transport);
+    },
+
+    MailerInterface::class => function (ContainerInterface $c) {
+        return new SwiftMailer(
+            $c->get(\Swift_Mailer::class),
+            $c->get('mail')['from']
+        );
+    }
 ];

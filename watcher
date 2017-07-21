@@ -3,10 +3,17 @@
 require 'bootstrap.php';
 
 use Symfony\Component\Console\Application;
+use Weeks\CurrencyWatcher\Application\Command\FetchCommand;
 
 $console = new Application(
         'Currency Watcher',
         '1.0'
 );
+$fetch = new FetchCommand(
+    $app->getContainer(),
+    'fetch'
+);
+
+$console->add($fetch);
 
 $console->run();

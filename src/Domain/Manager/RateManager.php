@@ -45,8 +45,6 @@ class RateManager
                 $targetCurrency
             );
 
-        var_dump($rate);die;
-
         return $this->rateRepository->save($rate);
     }
 }

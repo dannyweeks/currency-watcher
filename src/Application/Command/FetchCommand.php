@@ -3,9 +3,11 @@
 namespace Weeks\CurrencyWatcher\Application\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 use Weeks\CurrencyWatcher\Domain\Entity\Message;
+use Weeks\CurrencyWatcher\Domain\Entity\Rate;
 use Weeks\CurrencyWatcher\Domain\Mailer\MailerInterface;
 use Weeks\CurrencyWatcher\Domain\Manager\CurrencyManager;
 use Weeks\CurrencyWatcher\Domain\Manager\RateManager;
@@ -15,7 +17,12 @@ class FetchCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('fetch')
-            ->setDescription('Fetch the latest');
+            ->setDescription('Fetch the latest')
+            ->addOption(
+                'notify',
+                null,
+                InputOption::VALUE_NONE
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -25,12 +32,14 @@ class FetchCommand extends ContainerAwareCommand
         $base = $currencyManager->getByCode(Currency::CODE_GBP);
         $target = $currencyManager->getByCode(Currency::CODE_ISK);
 
-        $rate = $this->getContainer()
-            ->get(RateManager::class)
-            ->fetchNewRate(
-                $base,
-                $target
-            );
+        $rateManager = $this->getContainer()->get(RateManager::class);
+
+        $previousRate = $rateManager->getLastRate($base, $target);
+
+        $rate = $rateManager->fetchNewRate(
+            $base,
+            $target
+        );
 
         $text = sprintf(
             'Current rate for %s to %s is: %s',
@@ -38,9 +47,14 @@ class FetchCommand extends ContainerAwareCommand
             $target->getCode(),
             $rate->getValue()
         );
-        $output->writeln(
-            $text
-        );
+
+        if (!$previousRate instanceof Rate) {
+            $previousRate = $rate;
+        }
+
+
+
+        $output->writeln($text);
 
         $message = new Message(
             $this->getContainer()->get('notification')['emailRecipients'],
@@ -48,9 +62,11 @@ class FetchCommand extends ContainerAwareCommand
             $text
         );
 
-        $sent = $this->getContainer()->get(MailerInterface::class)->send($message);
+        if ($input->getOption('notify')) {
+            $sent = $this->getContainer()->get(MailerInterface::class)->send($message);
 
-        $output->writeln($sent ? 'Email sent' : 'Email failed');
+            $output->writeln($sent ? 'Email sent' : 'Email failed');
+        }
 
         return 0;
     }

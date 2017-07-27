@@ -1,0 +1,22 @@
+<phpunit
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        bootstrap="bootstrap.php" backupGlobals="false">
+    <php>
+        <env name="APP_ENV" value="testing"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="features">
+            <directory>tests/features</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

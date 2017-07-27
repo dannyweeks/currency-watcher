@@ -4,6 +4,7 @@ namespace Weeks\CurrencyWatcher\Domain\Manager;
 
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 use Weeks\CurrencyWatcher\Domain\Entity\Rate;
+use Weeks\CurrencyWatcher\Domain\Entity\RateComparison;
 use Weeks\CurrencyWatcher\Domain\Gateway\RateGatewayInterface;
 use Weeks\CurrencyWatcher\Domain\Repository\RateRepositoryInterface;
 
@@ -46,5 +47,27 @@ class RateManager
             );
 
         return $this->rateRepository->save($rate);
+    }
+
+    /**
+     * @param Currency $baseCurrency
+     * @param Currency $targetCurrency
+     *
+     * @return Rate
+     */
+    public function getLastRate(Currency $baseCurrency, Currency $targetCurrency)
+    {
+        return $this->rateRepository->lastRate($baseCurrency, $targetCurrency);
+    }
+
+    /**
+     * @param Rate $from
+     * @param Rate $to
+     *
+     * @return string
+     */
+    public function compare(Rate $from, Rate $to)
+    {
+        return new RateComparison($from, $to);
     }
 }

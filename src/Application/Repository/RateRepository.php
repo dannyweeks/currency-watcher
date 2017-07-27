@@ -40,4 +40,29 @@ class RateRepository extends EntityRepository implements RateRepositoryInterface
 
         return $rate;
     }
+
+    /**
+     * @param Currency $baseCurrency
+     * @param Currency $targetCurrency
+     *
+     * @return Rate
+     */
+    public function lastRate(Currency $baseCurrency, Currency $targetCurrency)
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        $qb->andWhere(
+            $qb->expr()->andX(
+                $qb->expr()->eq('r.baseCurrency', ':base'),
+                $qb->expr()->eq('r.targetCurrency', ':target')
+            )
+        );
+
+        $qb->setParameter('base', $baseCurrency)
+        ->setParameter('target', $targetCurrency)
+        ->addOrderBy('r.quotedAt', 'DESC')
+        ->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

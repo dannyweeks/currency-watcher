@@ -16,6 +16,14 @@ interface RateRepositoryInterface
     public function getLatestRate(Currency $baseCurrency, Currency $targetCurrency);
 
     /**
+     * @param Currency $baseCurrency
+     * @param Currency $targetCurrency
+     *
+     * @return Rate
+     */
+    public function lastRate(Currency $baseCurrency, Currency $targetCurrency);
+
+    /**
      * @param Rate $rate
      *
      * @return Rate

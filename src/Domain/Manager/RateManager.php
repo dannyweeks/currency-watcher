@@ -64,7 +64,7 @@ class RateManager
      * @param Rate $from
      * @param Rate $to
      *
-     * @return string
+     * @return RateComparison
      */
     public function compare(Rate $from, Rate $to)
     {

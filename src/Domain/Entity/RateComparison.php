@@ -56,25 +56,27 @@ class RateComparison
     {
         $change = $this->change();
 
-        if ($this->from->getValue() == $this->to->getValue()) {
-            return 'No change since ' . $this->from->getQuotedAt()->format('H:i d/m/Y');
+        switch (true) {
+            case $change < 0:
+                $message = 'Decrease by %1$s (from %2$s)';
+                break;
+            case $change > 0:
+                $message = 'Increase by %1$s (from %2$s)';
+                break;
+            case $this->from->getValue() == $this->to->getValue():
+                $message = 'No change since %3$s';
+                break;
+            case $this->from === $this->to:
+            default:
+                $message = '';
         }
 
-        if ($change > 0) {
-            return sprintf(
-                "Increase by %s (from %s)",
-                $change,
-                $this->from->getValue()
-            );
-        }
-
-        if ($change < 0) {
-            return sprintf(
-                "Decrease by %s (from %s)",
-                $change,
-                $this->from->getValue()
-            );
-        }
+        return sprintf(
+            $message,
+            $change,
+            $this->from->getValue(),
+            $this->from->getQuotedAt()->format('H:i d/m/Y')
+        );
     }
 
     /**

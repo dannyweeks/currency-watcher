@@ -54,7 +54,7 @@ class RateBuilder
             $this->baseCurrency,
             $this->targetCurrency,
             $this->quotedAt,
-            $this->value
+            $this->applyTransactionFee($this->value)
         );
     }
 
@@ -104,5 +104,15 @@ class RateBuilder
         $this->targetCurrency = $targetCurrency;
 
         return $this;
+    }
+
+    /**
+     * @param $value
+     *
+     * @return float
+     */
+    protected function applyTransactionFee($value)
+    {
+        return number_format($value * 0.9725, 4);
     }
 }

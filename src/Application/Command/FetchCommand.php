@@ -52,7 +52,9 @@ class FetchCommand extends ContainerAwareCommand
             $previousRate = $rate;
         }
 
+        $comparison = $rateManager->compare($previousRate, $rate);
 
+        $text .= '. ' . (string) $comparison;
 
         $output->writeln($text);
 

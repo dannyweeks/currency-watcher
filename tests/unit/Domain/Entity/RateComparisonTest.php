@@ -57,6 +57,45 @@ class RateComparisonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+    * @test
+    */
+    public function human_readable_indicates_a_decrease()
+    {
+        $comp = new RateComparison(
+            $this->getRate('2.134'),
+            $this->getRate('2')
+        );
+
+        $this->assertContains('decrease', $comp->forHuman(), '',true);
+    }
+
+    /**
+    * @test
+    */
+    public function human_readable_indicates_an_increase()
+    {
+        $comp = new RateComparison(
+            $this->getRate('2'),
+            $this->getRate('2.134')
+        );
+
+        $this->assertContains('increase', $comp->forHuman(), '',true);
+    }
+
+    /**
+    * @test
+    */
+    public function human_readable_indicates_no_change()
+    {
+        $comp = new RateComparison(
+            $this->getRate('2'),
+            $this->getRate('2')
+        );
+
+        $this->assertContains('no change', $comp->forHuman(), '',true);
+    }
+
+    /**
      * @param float         $value
      * @param DateTime      $date
      * @param Currency|null $base

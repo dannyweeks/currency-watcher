@@ -60,7 +60,7 @@ class FetchCommand extends ContainerAwareCommand
 
         $message = new Message(
             $this->getContainer()->get('notification')['emailRecipients'],
-            'Rate Update',
+            $rate->getValue() . ' - Rate Update',
             $text
         );
 

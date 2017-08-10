@@ -8,7 +8,6 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use Weeks\CurrencyWatcher\Application\Repository\CurrencyRepository;
 use Weeks\CurrencyWatcher\Domain\Manager\RateManager;
 use Weeks\CurrencyWatcher\Domain\Repository\CurrencyRepositoryInterface;
-use Weeks\CurrencyWatcher\Domain\Repository\RateRepositoryInterface;
 
 class SiteController
 {
@@ -39,10 +38,5 @@ class SiteController
         $rate = $manager->fetchNewRate($gbp, $isk);
 
         return $response;
-    }
-
-    public function listRates(Request $request, Response $response)
-    {
-
     }
 }

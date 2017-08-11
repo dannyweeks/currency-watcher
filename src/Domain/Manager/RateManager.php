@@ -70,4 +70,20 @@ class RateManager
     {
         return new RateComparison($from, $to);
     }
+
+    /**
+     * @param Currency $base
+     * @param Currency $target
+     *
+     * @return Rate[]
+     */
+    public function getHistoricalRates(Currency $base, Currency $target)
+    {
+        return array_reverse($this->rateRepository->search(
+            15,
+            0,
+            $base,
+            $target
+        ));
+    }
 }

@@ -68,5 +68,24 @@ return [
             $c->get(\Swift_Mailer::class),
             $c->get('mail')['from']
         );
-    }
+    },
+
+    'twig' => function (ContainerInterface $c) {
+        $view = new \Slim\Views\Twig(__DIR__ . '/../templates', [
+            'cache' => false
+        ]);
+
+        $basePath = rtrim(
+            str_ireplace(
+                'index.php',
+                '',
+                $c->get('request')->getUri()->getBasePath()
+            ),
+            '/'
+        );
+
+        $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $basePath));
+
+        return $view;
+    },
 ];

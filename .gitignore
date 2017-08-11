@@ -1,3 +1,5 @@
 db.sqlite
 vendor/
 .env
+cache/*
+!cache/.gitkeep

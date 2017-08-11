@@ -65,4 +65,33 @@ class RateRepository extends EntityRepository implements RateRepositoryInterface
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * @param $limit
+     * @param $offset
+     * @param $base
+     * @param $target
+     *
+     * @return Rate[]
+     */
+    public function search($limit, $offset, Currency $base, Currency $target)
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        $qb->andWhere(
+            $qb->expr()->andX(
+                $qb->expr()->eq('r.baseCurrency', ':base'),
+                $qb->expr()->eq('r.targetCurrency', ':target')
+            )
+        );
+
+        $qb->setParameter('base', $base)
+            ->setParameter('target', $target)
+            ->addOrderBy('r.quotedAt', 'DESC');
+
+        $qb->setMaxResults($limit);
+        $qb->setFirstResult($offset);
+
+        return $qb->getQuery()->getResult();
+    }
 }

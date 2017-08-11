@@ -4,7 +4,7 @@ namespace Weeks\CurrencyWatcher\Domain\Entity;
 
 use Weeks\CurrencyWatcher\Domain\Entity\Traits\IdentifiableTrait;
 
-class Rate
+class Rate implements \JsonSerializable
 {
     use IdentifiableTrait;
 
@@ -78,5 +78,22 @@ class Rate
     public function getTargetCurrency()
     {
         return $this->targetCurrency;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'quotedAt'       => $this->getQuotedAt()->format(\DATE_ISO8601),
+            'value'          => $this->getValue(),
+            'baseCurrency'   => $this->getBaseCurrency(),
+            'targetCurrency' => $this->getTargetCurrency(),
+        ];
     }
 }

@@ -29,4 +29,14 @@ interface RateRepositoryInterface
      * @return Rate
      */
     public function save(Rate $rate);
+
+    /**
+     * @param integer  $limit
+     * @param integer  $offset
+     * @param Currency $base
+     * @param Currency $target
+     *
+     * @return Rate[]
+     */
+    public function search($limit, $offset, Currency $base, Currency $target);
 }

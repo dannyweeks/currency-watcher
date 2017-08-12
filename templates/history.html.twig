@@ -16,7 +16,19 @@
     var ctx = document.getElementById("chart");
     var myLineChart = new Chart(ctx, {
         type: 'line',
-        data: {{ chartData | json_encode | raw }}
+        data: {{ chartData | json_encode | raw }},
+        options: {
+            fill: 'rgba(50, 100, 0, 0.1)',
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 45
+                    }
+                }]
+            }
+        }
     });
 </script>
 </body>

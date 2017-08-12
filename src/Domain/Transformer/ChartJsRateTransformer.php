@@ -52,6 +52,7 @@ class ChartJsRateTransformer implements TransformerInterface
                 [
                     'label' =>  $this->label,
                     'data' => $this->buildData(),
+                    'backgroundColor' =>  'rgba(128, 0, 128, 0.2)',
                 ]
             ],
         ];

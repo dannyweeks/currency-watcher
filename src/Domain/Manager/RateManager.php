@@ -74,14 +74,16 @@ class RateManager
     /**
      * @param Currency $base
      * @param Currency $target
+     * @param int      $limit
+     * @param int      $offset
      *
      * @return Rate[]
      */
-    public function getHistoricalRates(Currency $base, Currency $target)
+    public function getHistoricalRates(Currency $base, Currency $target, $limit = 30, $offset = 0)
     {
         return array_reverse($this->rateRepository->search(
-            15,
-            0,
+            $limit,
+            $offset,
             $base,
             $target
         ));

@@ -97,7 +97,7 @@ class RateManager
      */
     public function getHighestRate(Currency $base, Currency $target)
     {
-        $result = $this->rateRepository->search(1, 0, $base, $target, 'quotedAt', 'ASC');
+        $result = $this->rateRepository->search(1, 0, $base, $target, 'value');
 
         if (count($result) !== 1) {
             return null;
@@ -114,7 +114,7 @@ class RateManager
      */
     public function getLowRate(Currency $base, Currency $target)
     {
-        $result = $this->rateRepository->search(1, 0, $base, $target);
+        $result = $this->rateRepository->search(1, 0, $base, $target, 'value', 'ASC');
 
         if (count($result) !== 1) {
             return null;

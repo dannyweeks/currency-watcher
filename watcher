@@ -2,6 +2,8 @@
 <?php
 require 'bootstrap.php';
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Symfony\Component\Console\Application;
 use Weeks\CurrencyWatcher\Application\Command\FetchCommand;
 
@@ -9,6 +11,10 @@ $console = new Application(
         'Currency Watcher',
         '1.0'
 );
+
+$console->setHelperSet(ConsoleRunner::createHelperSet($app->getContainer()->get(EntityManager::class)));
+ConsoleRunner::addCommands($console);
+
 $fetch = new FetchCommand(
     $app->getContainer(),
     'fetch'

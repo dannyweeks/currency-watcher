@@ -42,11 +42,19 @@ class SiteController extends BaseController
             }
 
             $rateManager = $this->container->get(RateManager::class);
+            $limit = 50;
 
-            $rates = $rateManager->getHistoricalRates($baseCurrency, $targetCurrency);
+            if (isset($request->getQueryParams()['limit'])) {
+                $limit = $request->getQueryParams()['limit'];
+            }
+
+            $rates = $rateManager->getHistoricalRates($baseCurrency, $targetCurrency, $limit);
 
             $chartData = $this->getChartData($rates, $baseCurrency, $targetCurrency);
 
+            $high = $rateManager->getHighestRate($baseCurrency, $targetCurrency);
+
+            $low = $rateManager->getLowRate($baseCurrency, $targetCurrency);
         } catch (\Exception $e) {
             $response->getBody()->write($e->getMessage());
 
@@ -56,7 +64,9 @@ class SiteController extends BaseController
         return $this->getTwig()->render($response, 'history.html.twig', [
             'base'      => $baseCurrency,
             'target'    => $targetCurrency,
-            'chartData' => $chartData
+            'chartData' => $chartData,
+            'high'      => $high,
+            'low'       => $low,
         ]);
     }
 

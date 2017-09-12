@@ -35,8 +35,10 @@ interface RateRepositoryInterface
      * @param integer  $offset
      * @param Currency $base
      * @param Currency $target
+     * @param string   $orderBy
+     * @param string   $orderDirection
      *
      * @return Rate[]
      */
-    public function search($limit, $offset, Currency $base, Currency $target);
+    public function search($limit, $offset, Currency $base, Currency $target, $orderBy = '', $orderDirection = 'DESC');
 }

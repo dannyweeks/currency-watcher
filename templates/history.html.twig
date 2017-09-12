@@ -6,8 +6,16 @@
     <title>{{ base.code }} to {{ target.code }}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
 </head>
 <body>
+<div class="text-center">
+    <h2>
+        {{ base.code }} to {{ target.code }}
+    </h2>
+    <p><strong>High</strong> - {{ high.value | number_format(2) }} <small>{{ high.quotedAt | date('j/m/Y (a)') }}</small></p>
+    <p><strong>Low</strong> - {{ low.value | number_format(2) }} <small>{{ low.quotedAt | date('j/m/Y (a)') }}</small></p>
+</div>
 <div class="chart-container" style="position: relative; height:40vh; width:80vw">
     <canvas id="chart"></canvas>
 </div>

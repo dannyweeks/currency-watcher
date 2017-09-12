@@ -67,14 +67,16 @@ class RateRepository extends EntityRepository implements RateRepositoryInterface
     }
 
     /**
-     * @param $limit
-     * @param $offset
-     * @param $base
-     * @param $target
+     * @param int      $limit
+     * @param int      $offset
+     * @param Currency $base
+     * @param Currency $target
+     * @param string   $orderBy
+     * @param string   $orderDirection
      *
      * @return Rate[]
      */
-    public function search($limit, $offset, Currency $base, Currency $target)
+    public function search($limit, $offset, Currency $base, Currency $target, $orderBy = 'quotedAt', $orderDirection = 'DESC')
     {
         $qb = $this->createQueryBuilder('r');
 
@@ -86,10 +88,16 @@ class RateRepository extends EntityRepository implements RateRepositoryInterface
         );
 
         $qb->setParameter('base', $base)
-            ->setParameter('target', $target)
-            ->addOrderBy('r.quotedAt', 'DESC');
+            ->setParameter('target', $target);
 
-        $qb->setMaxResults($limit);
+        if (!empty($orderBy)) {
+            $qb->addOrderBy('r.' . $orderBy, $orderDirection);
+        }
+
+        if ($limit != '-1') {
+            $qb->setMaxResults($limit);
+        }
+
         $qb->setFirstResult($offset);
 
         return $qb->getQuery()->getResult();

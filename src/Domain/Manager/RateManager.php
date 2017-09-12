@@ -88,4 +88,38 @@ class RateManager
             $target
         ));
     }
+
+    /**
+     * @param Currency $base
+     * @param Currency $target
+     *
+     * @return Rate
+     */
+    public function getHighestRate(Currency $base, Currency $target)
+    {
+        $result = $this->rateRepository->search(1, 0, $base, $target, 'quotedAt', 'ASC');
+
+        if (count($result) !== 1) {
+            return null;
+        }
+
+        return $result[0];
+    }
+
+    /**
+     * @param Currency $base
+     * @param Currency $target
+     *
+     * @return Rate
+     */
+    public function getLowRate(Currency $base, Currency $target)
+    {
+        $result = $this->rateRepository->search(1, 0, $base, $target);
+
+        if (count($result) !== 1) {
+            return null;
+        }
+
+        return $result[0];
+    }
 }

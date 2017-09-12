@@ -5,6 +5,7 @@ require 'bootstrap.php';
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Weeks\CurrencyWatcher\Application\Command\FetchCommand;
 
 $console = new Application(
@@ -12,14 +13,24 @@ $console = new Application(
         '1.0'
 );
 
-$console->setHelperSet(ConsoleRunner::createHelperSet($app->getContainer()->get(EntityManager::class)));
+$helperSet = ConsoleRunner::createHelperSet($app->getContainer()->get(EntityManager::class));
+$helperSet->set(new QuestionHelper(), 'dialog');
+$console->setHelperSet($helperSet);
 ConsoleRunner::addCommands($console);
 
-$fetch = new FetchCommand(
-    $app->getContainer(),
-    'fetch'
-);
+$console->addCommands(array(
+    new FetchCommand(
+        $app->getContainer(),
+        'fetch'
+    ),
 
-$console->add($fetch);
+    // Migrations Commands
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
+));
 
 $console->run();

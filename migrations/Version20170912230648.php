@@ -37,9 +37,6 @@ class Version20170912230648 extends AbstractMigration
         $contents = file_get_contents(__DIR__ . '/files/initial.sql');
 
         $lines = explode("\n", $contents);
-        array_walk($lines, function ($line) {
-            return rtrim($line, ';');
-        });
 
         return $lines;
     }

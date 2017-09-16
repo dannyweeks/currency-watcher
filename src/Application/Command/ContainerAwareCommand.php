@@ -10,7 +10,7 @@ abstract class ContainerAwareCommand extends Command
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    private $container;
 
     public function __construct(ContainerInterface $container, $name)
     {

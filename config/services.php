@@ -1,5 +1,7 @@
 <?php
 
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
@@ -25,6 +27,13 @@ return [
         return EntityManager::create(
             $c->get('db'),
             $doctrineConfig
+        );
+    },
+
+    ORMExecutor::class => function (ContainerInterface $c) {
+        return new ORMExecutor(
+            $c->get(EntityManager::class),
+            new ORMPurger()
         );
     },
 

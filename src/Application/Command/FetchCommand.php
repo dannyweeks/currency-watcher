@@ -16,8 +16,7 @@ class FetchCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('fetch')
-            ->setDescription('Fetch the latest')
+        $this->setDescription('Fetch the latest')
             ->addOption(
                 'notify',
                 null,

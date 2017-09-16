@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Weeks\CurrencyWatcher\Application\Command\DbSeedCommand;
 use Weeks\CurrencyWatcher\Application\Command\FetchCommand;
 
 $console = new Application(
@@ -18,11 +19,15 @@ $helperSet->set(new QuestionHelper(), 'dialog');
 $console->setHelperSet($helperSet);
 ConsoleRunner::addCommands($console);
 
-$console->addCommands(array(
-    new FetchCommand(
-        $app->getContainer(),
-        'fetch'
-    ),
+$console->addCommands([
+    // Application Commands
+    new FetchCommand($app->getContainer(), 'app:fetch'),
+
+    // Helper Commands
+    new DbSeedCommand($app->getContainer(), 'db:seed'),
+
+    // deprecated; kept to not break cron job
+    new FetchCommand($app->getContainer(), 'fetch'),
 
     // Migrations Commands
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
@@ -31,6 +36,6 @@ $console->addCommands(array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
-));
+]);
 
 $console->run();

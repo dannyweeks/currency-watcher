@@ -11,6 +11,7 @@ use Weeks\CurrencyWatcher\Domain\Entity\Rate;
 use Weeks\CurrencyWatcher\Domain\Mailer\MailerInterface;
 use Weeks\CurrencyWatcher\Domain\Manager\CurrencyManager;
 use Weeks\CurrencyWatcher\Domain\Manager\RateManager;
+use Weeks\CurrencyWatcher\Domain\Repository\CurrencyRepositoryInterface;
 
 class FetchCommand extends ContainerAwareCommand
 {
@@ -26,6 +27,22 @@ class FetchCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $today = new \DateTime();
+
+        // Dont run at the weekend.
+        if (in_array($today->format('N'), [6,7])) {
+            return 0;
+        }
+
+        // Remind me to stop this running after the wedding!
+        if ($today > \DateTime::createFromFormat('Y-m-d', '2017-10-20')) {
+
+            if ($today > \DateTime::createFromFormat('Y-m-d', '2017-11-25')) {
+                $this->sendEmail('Watcher...', 'You should probably cancel this cron job...');
+            }
+            return 0;
+        }
+
         $currencyManager = $this->getContainer()->get(CurrencyManager::class);
 
         $base = $currencyManager->getByCode(Currency::CODE_GBP);
@@ -57,18 +74,26 @@ class FetchCommand extends ContainerAwareCommand
 
         $output->writeln($text);
 
-        $message = new Message(
-            $this->getContainer()->get('notification')['emailRecipients'],
-            $rate->getValue() . ' - Rate Update',
-            $text
-        );
-
         if ($input->getOption('notify')) {
-            $sent = $this->getContainer()->get(MailerInterface::class)->send($message);
+            $sent = $this->sendEmail(
+                $rate->getValue() . ' - Rate Update',
+                $text
+            );
 
             $output->writeln($sent ? 'Email sent' : 'Email failed');
         }
 
         return 0;
+    }
+
+    private function sendEmail($subject, $message)
+    {
+        $message = new Message(
+            $this->getContainer()->get('notification')['emailRecipients'],
+            $subject,
+            $message
+        );
+
+        return $this->getContainer()->get(MailerInterface::class)->send($message);
     }
 }

@@ -2,21 +2,31 @@
 
 namespace CurrencyWatcher\Seeder;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 
-class CurrencySeeder implements FixtureInterface
+class CurrencySeeder extends AbstractFixture implements FixtureInterface
 {
+    /**
+     * @param ObjectManager $manager
+     * @todo clean up this method
+     */
     public function load(ObjectManager $manager)
     {
-        $added = [];
+        $codes = [];
         foreach ($this->getCountries() as $country) {
             $code = $country['ISO4217-currency_alphabetic_code'];
-            if (in_array($code, $added)) {
+            if (in_array($code, $codes) || empty($code)) {
                 continue;
             }
-            $added[] = $code;
+            $codes[] = $code;
+        }
+
+        sort($codes);
+
+        foreach ($codes as $code) {
             $manager->persist(new Currency($code, '', ''));
         }
 

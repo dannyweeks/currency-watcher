@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 use Weeks\CurrencyWatcher\Domain\Repository\CurrencyRepositoryInterface;
 
-class CurrencyRepository extends EntityRepository implements CurrencyRepositoryInterface
+class DoctrineCurrencyRepository extends EntityRepository implements CurrencyRepositoryInterface
 {
     /**
      * @param $code

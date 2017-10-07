@@ -5,7 +5,7 @@ namespace Weeks\CurrencyWatcher\Application\Controller;
 use Psr\Container\ContainerInterface;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use Weeks\CurrencyWatcher\Application\Repository\CurrencyRepository;
+use Weeks\CurrencyWatcher\Application\Repository\DoctrineCurrencyRepository;
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 use Weeks\CurrencyWatcher\Domain\Entity\Rate;
 use Weeks\CurrencyWatcher\Domain\Manager\CurrencyManager;
@@ -15,7 +15,7 @@ use Weeks\CurrencyWatcher\Domain\Transformer\ChartJsRateTransformer;
 class SiteController extends BaseController
 {
     /**
-     * @var CurrencyRepository
+     * @var DoctrineCurrencyRepository
      */
     protected $currencyRepository;
 

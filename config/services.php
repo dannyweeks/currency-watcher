@@ -8,6 +8,7 @@ use Interop\Container\ContainerInterface;
 use Swap\Swap;
 use Weeks\CurrencyWatcher\Application\Gateway\SwapRateGateway;
 use Weeks\CurrencyWatcher\Application\Mailer\SwiftMailer;
+use Weeks\CurrencyWatcher\Application\Repository\SqlCurrencyRepository;
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 use Weeks\CurrencyWatcher\Domain\Entity\Rate;
 use Weeks\CurrencyWatcher\Domain\Gateway\RateGatewayInterface;

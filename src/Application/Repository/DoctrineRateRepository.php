@@ -7,7 +7,7 @@ use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 use Weeks\CurrencyWatcher\Domain\Entity\Rate;
 use Weeks\CurrencyWatcher\Domain\Repository\RateRepositoryInterface;
 
-class RateRepository extends EntityRepository implements RateRepositoryInterface
+class DoctrineRateRepository extends EntityRepository implements RateRepositoryInterface
 {
     /**
      * @param Currency $baseCurrency

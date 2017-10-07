@@ -1,6 +1,6 @@
 Weeks\CurrencyWatcher\Domain\Entity\Rate:
     type: entity
-    repositoryClass: Weeks\CurrencyWatcher\Application\Repository\RateRepository
+    repositoryClass: Weeks\CurrencyWatcher\Application\Repository\DoctrineRateRepository
     table: rates
     id:
         id:

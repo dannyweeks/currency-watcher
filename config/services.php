@@ -2,13 +2,13 @@
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use Swap\Swap;
 use Weeks\CurrencyWatcher\Application\Gateway\SwapRateGateway;
 use Weeks\CurrencyWatcher\Application\Mailer\SwiftMailer;
-use Weeks\CurrencyWatcher\Application\Repository\SqlCurrencyRepository;
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
 use Weeks\CurrencyWatcher\Domain\Entity\Rate;
 use Weeks\CurrencyWatcher\Domain\Gateway\RateGatewayInterface;
@@ -18,16 +18,17 @@ use Weeks\CurrencyWatcher\Domain\Repository\RateRepositoryInterface;
 
 return [
     EntityManager::class => function (ContainerInterface $c) {
-        $doctrineConfig = Setup::createYAMLMetadataConfiguration(
-            [
-                __DIR__ . "/doctrine"
-            ],
-            true
-        );
+        $config = Setup::createYAMLMetadataConfiguration([], true);
+
+        $driver = new SimplifiedYamlDriver([
+            __DIR__ . '/doctrine' => 'Weeks\CurrencyWatcher\Domain\Entity'
+        ]);
+
+        $config->setMetadataDriverImpl($driver);
 
         return EntityManager::create(
             $c->get('db'),
-            $doctrineConfig
+            $config
         );
     },
 

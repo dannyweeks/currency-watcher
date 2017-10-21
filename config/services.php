@@ -1,12 +1,14 @@
 <?php
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use Swap\Swap;
+use Weeks\CurrencyWatcher\Application\Command\DbSeedCommand;
 use Weeks\CurrencyWatcher\Application\Gateway\SwapRateGateway;
 use Weeks\CurrencyWatcher\Application\Mailer\SwiftMailer;
 use Weeks\CurrencyWatcher\Domain\Entity\Currency;
@@ -99,4 +101,12 @@ return [
 
         return $view;
     },
+
+    DbSeedCommand::class => function (ContainerInterface $c) {
+        return new DbSeedCommand(
+            $c->get(Loader::class),
+            $c->get(ORMExecutor::class),
+            $c->get('appRoot') . '/database/seeds'
+        );
+    }
 ];

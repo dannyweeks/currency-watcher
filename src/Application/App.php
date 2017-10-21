@@ -36,6 +36,7 @@ class App extends \DI\Bridge\Slim\App
         $builder->addDefinitions(array_merge(
             require __DIR__ . '/../../config/config.php',
             require __DIR__ . '/../../config/services.php',
+            require __DIR__ . '/../../config/migration-commands.php',
             [
                 'env'     => $this->environment,
                 'appRoot' => $this->applicationRoot,

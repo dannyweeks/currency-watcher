@@ -15,8 +15,14 @@ return [
         'driver' => 'pdo_sqlite',
         'path'   => __DIR__ . '/../db.sqlite',
     ],
+    'migrations'                   => [
+        'name'                 => 'Migrations',
+        'migrations_namespace' => 'Migrations',
+        'table_name'           => 'migration_versions',
+        'migrations_directory' => 'database/migrations',
+    ],
     'settings.displayErrorDetails' => true,
-    'notification' =>  [
+    'notification'                 => [
         'emailRecipients' => explode(',', env('NOTIFICATION_EMAIL_RECIPIENTS')),
     ],
 ];

@@ -24,18 +24,18 @@ $console->addCommands([
     new FetchCommand($app->getContainer(), 'app:fetch'),
 
     // Helper Commands
-    new DbSeedCommand($app->getContainer(), 'db:seed'),
+    $app->getContainer()->get(DbSeedCommand::class),
 
     // deprecated; kept to not break cron job
     new FetchCommand($app->getContainer(), 'fetch'),
 
     // Migrations Commands
-    new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
-    new \Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand(),
-    new \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand(),
-    new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
-    new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
-    new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
+    $app->getContainer()->get(\Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand::class),
+    $app->getContainer()->get(\Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand::class),
+    $app->getContainer()->get(\Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand::class),
+    $app->getContainer()->get(\Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand::class),
+    $app->getContainer()->get(\Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand::class),
+    $app->getContainer()->get(\Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand::class),
 ]);
 
 $console->run();

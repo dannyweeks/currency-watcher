@@ -1,0 +1,22 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{{ base.code }} to {{ target.code }}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
+</head>
+<body>
+<div class="text-center">
+    <h2>
+       Current {{ base.code }} to {{ target.code }}
+    </h2>
+    <p>
+        For every 1 {{ base.code }} you will get approximately {{ rate.value  | number_format(2) }} {{ target.code }}
+    </p>
+</div>
+
+</body>
+</html>

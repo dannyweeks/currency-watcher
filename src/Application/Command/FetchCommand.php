@@ -15,9 +15,14 @@ use Weeks\CurrencyWatcher\Domain\Repository\CurrencyRepositoryInterface;
 
 class FetchCommand extends ContainerAwareCommand
 {
+    const INPUT_BASE = 'base';
+    const INPUT_TARGET = 'target';
+
     protected function configure()
     {
         $this->setDescription('Fetch the latest')
+            ->addArgument(self::INPUT_BASE, InputOption::VALUE_REQUIRED)
+            ->addArgument(self::INPUT_TARGET, InputOption::VALUE_REQUIRED)
             ->addOption(
                 'notify',
                 null,
@@ -31,22 +36,13 @@ class FetchCommand extends ContainerAwareCommand
 
         // Dont run at the weekend.
         if (in_array($today->format('N'), [6,7])) {
-            return 0;
-        }
-
-        // Remind me to stop this running after the wedding!
-        if ($today > \DateTime::createFromFormat('Y-m-d', '2017-10-20')) {
-
-            if ($today > \DateTime::createFromFormat('Y-m-d', '2017-11-25')) {
-                $this->sendEmail('Watcher...', 'You should probably cancel this cron job...');
-            }
-            return 0;
+             //return 0;
         }
 
         $currencyManager = $this->getContainer()->get(CurrencyManager::class);
 
-        $base = $currencyManager->getByCode(Currency::CODE_GBP);
-        $target = $currencyManager->getByCode(Currency::CODE_ISK);
+        $base = $currencyManager->getByCode($input->getArgument(self::INPUT_BASE));
+        $target = $currencyManager->getByCode($input->getArgument(self::INPUT_TARGET));
 
         $rateManager = $this->getContainer()->get(RateManager::class);
 

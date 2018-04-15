@@ -19,6 +19,27 @@ class SiteController extends BaseController
      */
     protected $currencyRepository;
 
+    public function current(Request $request, Response $response, $base, $target)
+    {
+        $currencyManager = $this->container->get(CurrencyManager::class);
+
+        $base = $currencyManager->getByCode($base);
+        $target = $currencyManager->getByCode($target);
+
+        $rateManager = $this->container->get(RateManager::class);
+
+        $rate = $rateManager->fetchNewRate(
+            $base,
+            $target
+        );
+
+        return $this->getTwig()->render(
+            $response,
+            'current.html.twig',
+            compact('base', 'target', 'rate')
+        );
+    }
+
     public function history(Request $request, Response $response, $base, $target)
     {
         try {
